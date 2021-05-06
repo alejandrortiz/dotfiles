@@ -18,6 +18,9 @@ source "$DOTFILES_PATH/shell/init.sh"
 
 fpath=("$DOTFILES_PATH/shell/zsh/themes" "$DOTFILES_PATH/shell/zsh/autocompletions" "$DOTLY_PATH/shell/zsh/themes" "$DOTLY_PATH/shell/zsh/completions" $fpath)
 
+PATH="$PATH:/snap/bin"
+PATH="$PATH:/home/alex/.local/bin"
+
 autoload -Uz promptinit && promptinit
 prompt ${DOTLY_THEME:-codely}
 
