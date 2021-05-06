@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+# author: Alex Ortiz
+
+"""
+Usage: gitTag [-h] [-v] {delete,create}
+
+optional arguments:
+  -h, --help       show this help message and exit
+  -v, --verbose
+
+actions:
+  {delete,create}
+    delete         delete the last version tag
+    create         create the version tag
+"""
+import argparse
+import os
+from typing import Optional
+
+from _core.exception import GitError
+from _core.tag_creator import TagCreator
+
+from _utils.exit import Exit
+from _utils.console import Console
+from _utils.console_bg_colors import ConsoleBgColors as Colors
+
+
+class Action:
+    CREATE = 0
+    DELETE = 1
+
+
+def create_action(arg_version: Optional[str]) -> None:
+    console.info(arg_version)
+
+
+def delete_action() -> None:
+    print()
+
+
+def main() -> None:
+    draw_banner()
+
+    base_dir: str = os.getcwd()
+
+    if not os.path.isdir(base_dir + '/.git'):
+        console.error('Git has not been initialized')
+        Exit.wrong()
+
+    console.info('Git is initialized in <%s> path' % base_dir)
+
+    try:
+        if args.action == Action.CREATE:
+            result: dict = (TagCreator()).create(base_dir, args.version)
+
+            console.success('Tag generated\n\tVersion: {}\n\tCommit: \n\t\tChecksum: {} \n\t\tAuthor: {} \n\t\tMessage: {}'.format(result.get('version'), result.get('commit_checksum'), result.get('commit_author'), result.get('commit_message')))
+        else:
+            delete_action()
+    except GitError as e:
+        console.error(str(e))
+        Exit.wrong()
+
+    Exit.fine()
+
+
+def draw_banner() -> None:
+    banner = "\n______________________________\n"
+    banner += "   _____ _ _ _______           \n"
+    banner += "  / ____(_) |__   __|          \n"
+    banner += " | |  __ _| |_ | | __ _  __ _  \n"
+    banner += " | | |_ | | __|| |/ _` |/ _` | \n"
+    banner += " | |__| | | |_ | | (_| | (_| | \n"
+    banner += "  \_____|_|\__||_|\__,_|\__, | \n"
+    banner += "                         __/ | \n"
+    banner += Colors.warning(" (Owner Alex Ortiz)") + "     |___/  \n"
+    banner += "_______________________________\n"
+
+    console.log(banner)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog="gitTag")
+    parser.add_argument('-v', '--verbose', action='store_true', dest='is_verbose_activated')
+
+    subparsers = parser.add_subparsers(title="actions")
+    # Application special arguments
+    parser_update = subparsers.add_parser(
+        'delete', add_help=False, parents=[parser],
+        help="delete the last version tag"
+    )
+    parser_update.set_defaults(action=Action.DELETE)
+
+    parser_create = subparsers.add_parser(
+        'create', add_help=False, parents=[parser],
+        help="create the version tag"
+    )
+    parser_create.set_defaults(action=Action.CREATE)
+    parser_create.add_argument(
+        '--version', nargs='?',
+        help="indicate the new version tag to create (optional)"
+    )
+
+    parser.parse_args()
+    args = parser.parse_args()
+
+    console: Console = Console(args.is_verbose_activated)
+
+    main()
