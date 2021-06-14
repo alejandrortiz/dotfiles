@@ -1,6 +1,6 @@
 export DOTFILES_PATH="/home/alex/.dotfiles"
 export DOTLY_PATH="$DOTFILES_PATH/modules/dotly"
-export DOTLY_THEME="codely"
+export DOTLY_THEME="personal"
 
 if [[ "$(ps -p $$ -ocomm=)" =~ (bash$) ]]; then
   __right_prompt() {

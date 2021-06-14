@@ -11,6 +11,7 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##?    connect
 
 snx -s vpn.avoristravel.com -u alejandro.ortiz
-systemctl restart docker
 
-echo ""
+/home/alex/fix_tunsnx.sh
+
+echo "Connected!"
