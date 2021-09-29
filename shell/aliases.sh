@@ -28,3 +28,7 @@ alias i.='(idea $PWD &>/dev/null &)'
 alias c.='(code $PWD &>/dev/null &)'
 alias o.='open .'
 alias up='dot package update_all'
+
+# Work
+alias wh='cd /mnt/c/Users/alejandro.ortiz'
+alias code='wh && cd Code'
