@@ -8,12 +8,12 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 #?? 1.0.0
 ##?
 ##? Usage:
-##?    ddd hexagonal <path>
+##?    ddd
 
-docs::eval "$@"
+# mkdir -p "$path/Application"
+# mkdir -p "$path/Domain"
+# mkdir -p "$path/Infrastructure"
 
-mkdir -p "$path/Application"
-mkdir -p "$path/Domain"
-mkdir -p "$path/Infrastructure"
+mkdir {Application,Domain,Infrastructure}
 
 echo "🧞 Created!"
