@@ -12,6 +12,28 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 
 snx -s vpn.avoristravel.com -u alejandro.ortiz
 
-/home/alex/fix_tunsnx.sh
+function get_interface_data {
+    interface=$1
+    ip -o address show $interface | awk -F ' +' '{print $4 " " $6 " " $8}'
+}
+
+LOCAL_ADDRESS_INDEX=0
+PEER_ADDRESS_INDEX=1
+SCOPE_INDEX=2
+
+function set_global_scope_if_required {
+    data=($(get_interface_data tunsnx))
+    [ "${data[$SCOPE_INDEX]}" == "global" ] && return
+
+    echo "Setting global routing scope"
+    tmpfile=$(mktemp --suffix=snxwrapper-routes)
+    sudo ip route save > $tmpfile
+    sudo ip address del ${data[$LOCAL_ADDRESS_INDEX]} peer ${data[$PEER_ADDRESS_INDEX]} dev tunsnx
+    sudo ip address add ${data[$LOCAL_ADDRESS_INDEX]} dev tunsnx peer ${data[$PEER_ADDRESS_INDEX]} scope global
+    sudo ip route restore < $tmpfile 2>/dev/null
+    rm $tmpfile
+}
+
+set_global_scope_if_required
 
 echo "Connected!"
