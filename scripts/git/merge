@@ -23,5 +23,3 @@ git push --progress --porcelain origin HEAD
 git checkout ${current_branch}
 
 echo "👍 Merged!"
-
-
