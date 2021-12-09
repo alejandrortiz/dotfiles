@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? DDD
+#?? 1.0.0
+##?
+##? Usage:
+##?    git merge
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+destination_branch="$(git branch | fzf --height 100%)"
+
+echo $destination_branch
+
+git checkout ${destination_branch}
+git merge ${current_branch}
+git push --progress --porcelain origin HEAD
+
+git checkout ${current_branch}
+
+echo "👍 Merged!"
+
+
