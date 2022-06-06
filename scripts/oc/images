@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? DDD
+#?? 1.0.0
+##?
+##? Usage:
+##?    oc <oc_token>
+
+token="$1"
+
+docker login https://default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io -p "${token}" -u unused
+
+# ---
+
+# Downloading & updating images
+
+## PHP 7.4
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest74fpm
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest74fpmbuster
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest74fpmbullseye
+
+## PHP 8.1
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest81fpm
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest81fpmbuster
+docker pull default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io/openshift/b-runner-php:latest81fpmbullseye
+
+# ---
+
+docker image prune -f
+docker logout
+
+echo "🧞 Updated!"
