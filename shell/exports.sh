@@ -1,6 +1,7 @@
 export JAVA_HOME='/'
 export GEM_HOME="$HOME/.gem"
 export GOPATH="$HOME/.go"
+export ANDROID_HOME="$HOME/Android/Sdk"
 
 export SPRING_CLI_HOME="$DOTFILES_PATH/langs/java/spring-cli/spring-2.3.9.BUILD-SNAPSHOT/bin"
 
@@ -14,6 +15,11 @@ export path=(
   "$DOTLY_PATH/bin"
   "$DOTFILES_PATH/bin"
   "$JAVA_HOME/bin"
+  "$ANDROID_HOME"
+  "$ANDROID_HOME/emulator"
+  "$ANDROID_HOME/tools"
+  "$ANDROID_HOME/tools/bin"
+  "$ANDROID_HOME/platform-tools"
   "$SPRING_CLI_HOME"
   "$GEM_HOME/bin"
   "$GOPATH/bin"

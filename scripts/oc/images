@@ -10,7 +10,13 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Usage:
 ##?    oc <oc_token>
 
-token="$1"
+if [ -z ${1+x} ]; then 
+    xdg-open https://console-openshift-console.apps.ocpmain.aws-main.avoristravel.io/
+
+    read token
+else
+    token="$1"
+fi
 
 docker login https://default-route-openshift-image-registry.apps.ocpmain.aws-main.avoristravel.io -p "${token}" -u unused
 

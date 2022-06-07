@@ -13,15 +13,29 @@ prompt_personal_git() {
 }
 
 prompt_personal_status() {
-  local -r work_ip=$("$DOTLY_PATH/bin/dot" work ip)
+  local prompt_status=""
 
-  if [[ ${work_ip} ]]; then
-    prompt_icon=" "
-  else
-    prompt_icon="λ"
+  F_VDOBLE="\033#6"
+
+  if [[ $("$DOTLY_PATH/bin/dot" work ip) ]]; then
+    prompt_status=""
   fi
 
-  print -n "%(?:%F{green}{%F{white}${prompt_icon}%F{green}}:%F{red}{%F{white}${prompt_icon}%F{red}})"
+  local -r docker_count=$(docker ps | awk '{if(NR>1)print}' | wc -l)
+
+  if [[ ${docker_count} -gt 0 ]]; then
+    docker_status=""
+
+    if [[ ! -z "$prompt_status" ]]; then
+      prompt_status="${F_VDOBLE}$prompt_status $docker_status"
+    else
+      prompt_status="$docker_status"
+    fi
+  fi
+
+  [ ! -z "$prompt_status" ] && print -n "%(?:%F{green}{${prompt_status}}:%F{red}{${prompt_status}})" || print -n ""
+
+  # print -n "%(?:%F{green}${prompt_icon}:%F{red}${prompt_icon})"
 }
 
 prompt_right_personal_status() {
@@ -29,7 +43,7 @@ prompt_right_personal_status() {
   local prompt_right_text=""
 
   if [[ ${docker_count} -gt 0 ]]; then
-    prompt_right_text="(  ${docker_count})"
+    prompt_right_text="{  ${docker_count}}"
   fi
 
   print -n "${prompt_right_text}"
@@ -50,8 +64,8 @@ prompt_personal_setup() {
   zstyle ':zim:git-info:dirty' format '%F{yellow}$DIRTY'
   zstyle ':zim:git-info:keys' format 'prompt' ' %F{cyan}%b%c %C%D'
 
-  PS1="\$(prompt_personal_status) \$(prompt_personal_pwd)\$(prompt_personal_git)%f "
-  RPS1="\$(prompt_right_personal_status)"
+  PS1=" \$(prompt_personal_status) \$(prompt_personal_pwd)\$(prompt_personal_git)%f
+  %>"
 }
 
 prompt_personal_setup "${@}"
