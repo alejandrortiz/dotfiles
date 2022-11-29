@@ -30,5 +30,5 @@ alias o.='open .'
 alias up='dot package update_all'
 
 # Work
-alias wh='cd /mnt/c/Users/alejandro.ortiz'
-alias code='wh && cd Code'
+alias wh='cd /home/alex'
+alias coded='wh && cd Code'

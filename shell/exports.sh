@@ -1,4 +1,5 @@
 export JAVA_HOME='/'
+export MAVEN_HOME='/opt/apache-maven-3.8.6'
 export GEM_HOME="$HOME/.gem"
 export GOPATH="$HOME/.go"
 export ANDROID_HOME="$HOME/Android/Sdk"
@@ -15,6 +16,7 @@ export path=(
   "$DOTLY_PATH/bin"
   "$DOTFILES_PATH/bin"
   "$JAVA_HOME/bin"
+  "$MAVEN_HOME/bin"
   "$ANDROID_HOME"
   "$ANDROID_HOME/emulator"
   "$ANDROID_HOME/tools"
