@@ -4,8 +4,7 @@ DIRTY="✗"
 NONE="✓"
 
 prompt_personal_pwd() {
-  local -r prompt_short_dir=$("$DOTLY_PATH/bin/dot" core short_pwd)
-  print -n "%F{yellow}${prompt_short_dir}"
+  print -n "%F{yellow}${$(pwd)}"
 }
 
 prompt_personal_git() {
@@ -13,40 +12,21 @@ prompt_personal_git() {
 }
 
 prompt_personal_status() {
-  local prompt_status=""
+  local prompt_icons=""
 
   F_VDOBLE="\033#6"
 
-  if [[ $("$DOTLY_PATH/bin/dot" work ip) ]]; then
-    prompt_status=""
-  fi
-
   local -r docker_count=$(docker ps | awk '{if(NR>1)print}' | wc -l)
 
   if [[ ${docker_count} -gt 0 ]]; then
-    docker_status=""
-
-    if [[ ! -z "$prompt_status" ]]; then
-      prompt_status="${F_VDOBLE}$prompt_status $docker_status"
-    else
-      prompt_status="$docker_status"
-    fi
+    prompt_icons="$prompt_icons  "
   fi
 
-  [ ! -z "$prompt_status" ] && print -n "%(?:%F{green}{${prompt_status}}:%F{red}{${prompt_status}})" || print -n ""
-
-  # print -n "%(?:%F{green}${prompt_icon}:%F{red}${prompt_icon})"
-}
-
-prompt_right_personal_status() {
-  local -r docker_count=$(docker ps | awk '{if(NR>1)print}' | wc -l)
-  local prompt_right_text=""
-
-  if [[ ${docker_count} -gt 0 ]]; then
-    prompt_right_text="{  ${docker_count}}"
+  if [ ! -z  "$prompt_icons" ]; then
+    print -n "%F{cyan}::${prompt_icons}::"
+  else
+    print -n ""
   fi
-
-  print -n "${prompt_right_text}"
 }
 
 prompt_personal_precmd() {
