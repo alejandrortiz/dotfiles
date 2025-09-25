@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? Generate a UUID and put it on clipboard
+#?? 1.0.0
+##?
+##? Usage:
+##?    uuid
+
+uuidgen | xclip -selection clipboard
+
+echo "🧞 Generated!"

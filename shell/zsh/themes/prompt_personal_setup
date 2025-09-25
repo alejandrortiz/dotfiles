@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+
+[[ $(echotc Co) -gt 100 ]] && support_color_tones=true || support_color_tones=false
+
+DIRTY="✗"
+NONE="✓"
+
+prompt_personal_pwd() {
+  print -n "%F{yellow}${$(pwd)}"
+}
+
+prompt_personal_git() {
+  [[ -n ${git_info} ]] && print -n "%F{white} on${(e)git_info[prompt]}"
+}
+
+prompt_personal_status() {
+  local prompt_icons=""
+
+  F_VDOBLE="\033#6"
+
+  local -r docker_count=$(docker ps | awk 'NR>1 && $NF !~ /k8s/' | wc -l)
+
+  if [[ ${docker_count} -gt 0 ]]; then
+    prompt_icons="$prompt_icons  "
+  fi
+
+  if [ ! -z  "$prompt_icons" ]; then
+    print -n "%F{cyan}::${prompt_icons}::"
+  else
+    print -n ""
+  fi
+}
+
+prompt_personal_precmd() {
+  (( ${+functions[git-info]} )) && git-info
+}
+
+prompt_personal_setup() {
+  autoload -Uz add-zsh-hook && add-zsh-hook precmd prompt_personal_precmd
+
+  prompt_opts=(cr percent sp subst)
+
+  zstyle ':zim:git-info:branch' format '%F{green}%b'
+  zstyle ':zim:git-info:commit' format '%c'
+  zstyle ':zim:git-info:clean' format '%F{white}$NONE'
+  zstyle ':zim:git-info:dirty' format '%F{yellow}$DIRTY'
+  zstyle ':zim:git-info:keys' format 'prompt' ' %F{cyan}%b%c %C%D'
+
+  PS1="\$(prompt_personal_status) \$(prompt_personal_pwd)\$(prompt_personal_git)%f
+  %>"
+}
+
+prompt_personal_setup "${@}"
