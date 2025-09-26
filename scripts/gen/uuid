@@ -10,6 +10,6 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Usage:
 ##?    uuid
 
-uuidgen | xclip -selection clipboard
+uuidgen | pbcopy
 
 echo "🧞 Generated!"
